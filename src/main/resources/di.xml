@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+        https://www.springframework.org/schema/beans/spring-beans.xsd">
+    <bean id="consoleio" class="learn.dontwreckmyhouse.ui.ConsoleIO"/>
+    <bean id="view" class="learn.dontwreckmyhouse.ui.View">
+        <constructor-arg ref="consoleio"/>
+    </bean>
+
+    <bean id="guestrepo" class="learn.dontwreckmyhouse.data.GuestFileRepository">
+        <constructor-arg value="./data/guests.csv"/>
+    </bean>
+    <bean id="hostrepo" class="learn.dontwreckmyhouse.data.HostFileRepository">
+        <constructor-arg value="./data/hosts.csv"/>
+    </bean>
+    <bean id="resrepo" class="learn.dontwreckmyhouse.data.ReservationFileRepository">
+        <constructor-arg value="./data/reservations"/>
+    </bean>
+
+    <bean id="guestservice" class="learn.dontwreckmyhouse.domain.GuestService">
+        <constructor-arg ref="guestrepo"/>
+    </bean>
+    <bean id="hostservice" class="learn.dontwreckmyhouse.domain.HostService">
+        <constructor-arg ref="hostrepo"/>
+    </bean>
+    <bean id="resservice" class="learn.dontwreckmyhouse.domain.ReservationService">
+        <constructor-arg ref="resrepo"/>
+        <constructor-arg ref="hostrepo"/>
+        <constructor-arg ref="guestrepo"/>
+    </bean>
+
+    <bean id="controller" class="learn.dontwreckmyhouse.ui.Controller">
+        <constructor-arg ref="guestservice"/>
+        <constructor-arg ref="hostservice"/>
+        <constructor-arg ref="resservice"/>
+        <constructor-arg ref="view"/>
+    </bean>
+</beans>
