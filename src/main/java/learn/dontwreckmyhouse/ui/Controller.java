@@ -112,11 +112,6 @@ public class Controller {
     private void updateReservation() throws DataException {
         view.displayHeader(MainMenuOption.UPDATE_RESERVATION.getMessage());
 
-        Guest guest = getGuest();
-        if(guest == null){
-            view.displayStatus(false, "Guest does not exist.");
-            return;
-        }
         Host host = getHost();
         if(host == null){
             view.displayStatus(false, "Host does not exist.");
@@ -150,12 +145,7 @@ public class Controller {
 
     private void removeReservation() throws DataException {
         view.displayHeader(MainMenuOption.REMOVE_RESERVATION.getMessage());
-
-        Guest guest = getGuest();
-        if(guest == null){
-            view.displayStatus(false, "Guest does not exist.");
-            return;
-        }
+        
         Host host = getHost();
         if(host == null){
             view.displayStatus(false, "Host does not exist.");
