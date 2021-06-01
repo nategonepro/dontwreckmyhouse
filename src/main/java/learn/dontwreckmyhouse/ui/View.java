@@ -201,6 +201,24 @@ public class View {
         }
     }
 
+    public void displayReservationsWithHost(List<Reservation> reservations){
+        if(reservations.size() == 0){
+            io.println("No items found");
+        }
+
+        for(Reservation r : reservations){
+            io.printf("ID: %s, %s - %s, Guest: %s, %s, Email: %s, Hosted by %s in %s%n",
+                    r.getId(),
+                    io.formatDate(r.getStartDate()),
+                    io.formatDate(r.getEndDate()),
+                    r.getGuest().getLastName(),
+                    r.getGuest().getFirstName(),
+                    r.getGuest().getEmail(),
+                    r.getHost().getLastName(),
+                    r.getHost().getState());
+        }
+    }
+
     public boolean displaySummaryIsOk(Reservation reservation){
         displayHeader("Summary");
         io.println("Start: " + io.formatDate(reservation.getStartDate()));

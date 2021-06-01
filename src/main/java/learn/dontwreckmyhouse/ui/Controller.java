@@ -202,7 +202,7 @@ public class Controller {
             }
         }
 
-        view.displayReservations(reservationsByGuest);
+        view.displayReservationsWithHost(reservationsByGuest);
     }
 
     private void viewByState(){
@@ -230,7 +230,7 @@ public class Controller {
             }
         }
 
-        view.displayReservations(reservationsByState);
+        view.displayReservationsWithHost(reservationsByState);
     }
 
     //helper methods
