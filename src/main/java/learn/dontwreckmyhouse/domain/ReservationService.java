@@ -10,6 +10,7 @@ import learn.dontwreckmyhouse.models.Reservation;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -23,6 +24,27 @@ public class ReservationService {
         this.reservationRepository = reservationRepository;
         this.hostRepository = hostRepository;
         this.guestRepository = guestRepository;
+    }
+
+    public Map<String, List<Reservation>> findAll(){
+        Map<String, List<Reservation>> result = reservationRepository.findAll();
+        if(result==null || result.size()==0){
+            return null;
+        }
+
+        Map<String, Host> hostMap = hostRepository.findAll().stream()
+                .collect(Collectors.toMap(i -> i.getId(), i-> i));
+        Map<Integer, Guest> guestMap = guestRepository.findAll().stream()
+                .collect(Collectors.toMap(i -> i.getId(), i -> i));
+
+        for(List<Reservation> reservations : result.values()){
+            for(Reservation reservation : reservations){
+                reservation.setHost(hostMap.get(reservation.getHost().getId()));
+                reservation.setGuest(guestMap.get(reservation.getGuest().getId()));
+            }
+        }
+
+        return result;
     }
 
     public List<Reservation> findByHost(Host host){

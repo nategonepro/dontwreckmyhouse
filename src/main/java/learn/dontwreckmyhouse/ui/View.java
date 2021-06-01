@@ -29,8 +29,19 @@ public class View {
             max = Math.max(max, option.getValue());
         }
 
-        String message = String.format("Select [%s-%s]: ", min, max-1);
+        String message = String.format("Select [%s-%s]: ", min, max);
         return MainMenuOption.fromValue(io.readInt(message, min, max));
+    }
+
+    public String getState(){
+        String state = "";
+        do {
+            state = io.readRequiredString("Enter state [XX]: ");
+            if(state.length() != 2){
+                io.println("State must be in two-character abbreviated format [XX].");
+            }
+        }while(state.length() != 2);
+        return state;
     }
 
     public String getHostEmailPrefix(){

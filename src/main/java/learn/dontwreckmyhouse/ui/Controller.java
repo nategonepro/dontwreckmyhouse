@@ -10,8 +10,7 @@ import learn.dontwreckmyhouse.models.Host;
 import learn.dontwreckmyhouse.models.Reservation;
 
 import java.time.LocalDate;
-import java.util.Comparator;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class Controller {
@@ -54,6 +53,12 @@ public class Controller {
                     break;
                 case REMOVE_RESERVATION:
                     removeReservation();
+                    break;
+                case VIEW_BY_GUEST:
+                    viewByGuest();
+                    break;
+                case VIEW_BY_STATE:
+                    viewByState();
                     break;
             }
         }while(option != MainMenuOption.EXIT);
@@ -145,7 +150,7 @@ public class Controller {
 
     private void removeReservation() throws DataException {
         view.displayHeader(MainMenuOption.REMOVE_RESERVATION.getMessage());
-        
+
         Host host = getHost();
         if(host == null){
             view.displayStatus(false, "Host does not exist.");
@@ -170,6 +175,62 @@ public class Controller {
         }else{
             view.displayStatus(true, "Reservation ID #" + result.getPayload().getId() + " deleted.");
         }
+    }
+
+    private void viewByGuest(){
+        view.displayHeader(MainMenuOption.VIEW_BY_GUEST.getMessage());
+
+        Guest guest = getGuest();
+
+        if(guest == null){
+            return;
+        }
+
+        ArrayList<Reservation> reservationsByGuest = new ArrayList<>();
+
+        Map<String, List<Reservation>> allReservations = reservationService.findAll();
+
+        if(allReservations == null){
+            return;
+        }
+
+        for(List<Reservation> reservations : allReservations.values()){
+            for(Reservation r : reservations){
+                if(r.getGuest().getId() == guest.getId()){
+                    reservationsByGuest.add(r);
+                }
+            }
+        }
+
+        view.displayReservations(reservationsByGuest);
+    }
+
+    private void viewByState(){
+        view.displayHeader(MainMenuOption.VIEW_BY_STATE.getMessage());
+
+        String state = view.getState();
+
+        if(state == null){
+            return;
+        }
+
+        ArrayList<Reservation> reservationsByState = new ArrayList<>();
+
+        Map<String, List<Reservation>> allReservations = reservationService.findAll();
+
+        if(allReservations == null){
+            return;
+        }
+
+        for(List<Reservation> reservations : allReservations.values()){
+            for(Reservation r : reservations){
+                if(r.getHost().getState().equalsIgnoreCase(state)){
+                    reservationsByState.add(r);
+                }
+            }
+        }
+
+        view.displayReservations(reservationsByState);
     }
 
     //helper methods
